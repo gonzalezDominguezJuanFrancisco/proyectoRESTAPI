@@ -15,7 +15,16 @@ class GrupoRoutes {
     }
 
     private getGrupos = async (req: Request, res: Response) => {
-        res.json("Bienvenidos a mi proyecto RESTAPI")
+        await db.conectarBD()
+        .then( async (mensaje) => {
+            const query = await Grupos.find()
+            res.json(query)
+        })
+        .catch((mensaje) => {
+            res.send(mensaje)
+        })
+
+        await db.desconectarBD()
     }
 
     private verGrupo = async (req: Request, res: Response) => {
@@ -23,38 +32,6 @@ class GrupoRoutes {
         await db.conectarBD()
         const g1: any = await Grupos.findOne({_nombre: grupo})
         res.json(g1)
-        await db.desconectarBD()
-    }
-
-    private mostrarGrupos = async (req: Request, res: Response) => {
-        await db.conectarBD()
-        type g = {
-            nombre: String,
-            info: String
-        }
-        let gru: any
-        let query: any
-        let aG: Array<g> = new Array()
-        query = await Grupos.find({})
-        for (gru of query) {
-            let miembros: Array<Miembro> = new Array()
-            for (let m of gru._miembros) {
-                let am = new Miembro(m._nombre, m._apodo, m._fechaNacimiento, m._puesto)
-                miembros.push(am)
-            }
-            let canciones: Array<Cancion> = new Array()
-            for (let c of gru._canciones) {
-                let ac = new Cancion(c._nombre, c._duracion, c._likes, c._fechaSalida, c._genero, c._topVentas)
-                canciones.push(ac)
-            }
-            let g = new Grupo(gru._nombre, gru._fechaCreacion, canciones, miembros)
-            const ig: g = {
-                nombre: g.nombre, 
-                info: g.verGrupo()
-            }
-            aG.push(ig)
-        }
-        res.json(aG)
         await db.desconectarBD()
     }
 
@@ -392,7 +369,6 @@ class GrupoRoutes {
     rutas() {
         this._router.get('/', this.getGrupos)
         this._router.get('/vGrupo/:grupo', this.verGrupo)
-        this._router.get('/mGrupos', this.mostrarGrupos)
         this._router.get('/cGrupo/:nombreG&:fechaCreacionG', this.crearGrupo)
         this._router.get('/dMedia', this.duraMedia)
         this._router.get('/eMedia', this.edMedia)

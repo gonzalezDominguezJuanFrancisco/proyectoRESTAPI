@@ -8,7 +8,6 @@ Links:
     eMedia: Edad media
     borrar: Borrar grupo
     vGrupo: Ver un grupo
-    mGrupo: Mostar grupos
     dMedia: Duracion media
     uMiembro: Unir miembro
     uCancion: Unir cancion

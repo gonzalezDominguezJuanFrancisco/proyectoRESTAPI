@@ -18,40 +18,21 @@ const database_1 = require("../database/database");
 class GrupoRoutes {
     constructor() {
         this.getGrupos = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            res.json("Bienvenidos a mi proyecto RESTAPI");
+            yield database_1.db.conectarBD()
+                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
+                const query = yield Grupo_1.Grupos.find();
+                res.json(query);
+            }))
+                .catch((mensaje) => {
+                res.send(mensaje);
+            });
+            yield database_1.db.desconectarBD();
         });
         this.verGrupo = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { grupo } = req.params;
             yield database_1.db.conectarBD();
             const g1 = yield Grupo_1.Grupos.findOne({ _nombre: grupo });
             res.json(g1);
-            yield database_1.db.desconectarBD();
-        });
-        this.mostrarGrupos = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            yield database_1.db.conectarBD();
-            let gru;
-            let query;
-            let aG = new Array();
-            query = yield Grupo_1.Grupos.find({});
-            for (gru of query) {
-                let miembros = new Array();
-                for (let m of gru._miembros) {
-                    let am = new Miembro_1.Miembro(m._nombre, m._apodo, m._fechaNacimiento, m._puesto);
-                    miembros.push(am);
-                }
-                let canciones = new Array();
-                for (let c of gru._canciones) {
-                    let ac = new Cancion_1.Cancion(c._nombre, c._duracion, c._likes, c._fechaSalida, c._genero, c._topVentas);
-                    canciones.push(ac);
-                }
-                let g = new Grupo_1.Grupo(gru._nombre, gru._fechaCreacion, canciones, miembros);
-                const ig = {
-                    nombre: g.nombre,
-                    info: g.verGrupo()
-                };
-                aG.push(ig);
-            }
-            res.json(aG);
             yield database_1.db.desconectarBD();
         });
         this.crearGrupo = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -372,7 +353,6 @@ class GrupoRoutes {
     rutas() {
         this._router.get('/', this.getGrupos);
         this._router.get('/vGrupo/:grupo', this.verGrupo);
-        this._router.get('/mGrupos', this.mostrarGrupos);
         this._router.get('/cGrupo/:nombreG&:fechaCreacionG', this.crearGrupo);
         this._router.get('/dMedia', this.duraMedia);
         this._router.get('/eMedia', this.edMedia);
