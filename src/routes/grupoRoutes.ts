@@ -15,16 +15,7 @@ class GrupoRoutes {
     }
 
     private getGrupos = async (req: Request, res: Response) => {
-        await db.conectarBD()
-        .then( async (mensaje) => {
-            const query = await Grupos.find()
-            res.json(query)
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-        })
-
-        await db.desconectarBD()
+        res.json("Bienvenidos a mi proyecto RESTAPI")
     }
 
     private verGrupo = async (req: Request, res: Response) => {

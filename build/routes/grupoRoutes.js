@@ -18,15 +18,7 @@ const database_1 = require("../database/database");
 class GrupoRoutes {
     constructor() {
         this.getGrupos = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            yield database_1.db.conectarBD()
-                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
-                const query = yield Grupo_1.Grupos.find();
-                res.json(query);
-            }))
-                .catch((mensaje) => {
-                res.send(mensaje);
-            });
-            yield database_1.db.desconectarBD();
+            res.json("Bienvenidos a mi proyecto RESTAPI");
         });
         this.verGrupo = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { grupo } = req.params;
@@ -383,10 +375,10 @@ class GrupoRoutes {
         this._router.get('/mGrupos', this.mostrarGrupos);
         this._router.get('/cGrupo/:nombreG&:fechaCreacionG', this.crearGrupo);
         this._router.get('/dMedia', this.duraMedia);
-        this._router.get('/edMedia', this.edMedia);
+        this._router.get('/eMedia', this.edMedia);
         this._router.get('/uMiembro/:grupo&:nombre&:apodo&:fechaNacimiento&:puesto', this.uneMiembro);
         this._router.get('/uCancion/:grupo&:nombre&:duracion&:likes&:fechaSalida&:genero&:topVentas', this.uneCancion);
-        this._router.get('/edMiembro/:grupo&:nombreM', this.edadMiembro);
+        this._router.get('/eMiembro/:grupo&:nombreM', this.edadMiembro);
         this._router.get('/vTop/:grupo', this.verTop);
         this._router.get('/sCancion/:grupo&:cancion', this.salidaCancion);
         this._router.get('/eCancion/:grupo&:nombre&:duracion&:likes&:fechaSalida&:genero&:topVentas', this.editCancion);
